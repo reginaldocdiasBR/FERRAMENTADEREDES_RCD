@@ -3,8 +3,9 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="referrer" content="strict-origin-when-cross-origin" />
   <title>Central de Ferramentas de Rede - Sem Backend</title>
-  <script src="https://geoip-js.com/js/apis/geoip2/v2.1/geoip2.js" async></script>
+  <script src="https://geoip-js.com/js/apis/geoip2/v2.1/geoip2.js" async referrerpolicy="no-referrer" onerror="console.warn('GeoIP2 externo indisponível; a página continuará funcionando.')"></script>
   <style>
     :root{
       --claro-red:#DA291C;
@@ -77,10 +78,22 @@
     .batch-table th,.batch-table td{border-bottom:1px solid var(--line);padding:9px;text-align:left;font-size:12px;vertical-align:top}
     .batch-table th{background:#fafafa;color:#555;text-transform:uppercase;font-size:11px}.batch-table .ok{color:var(--green);font-weight:800}.batch-table .fail{color:var(--danger);font-weight:800}
     @media(max-width:900px){.app{grid-template-columns:1fr}aside{position:relative;height:auto}.col-8,.col-6,.col-4,.col-3{grid-column:span 12}.kv .k{width:140px}.batch-table{display:block;overflow:auto}}
-    .top-controls{position:absolute;top:18px;right:28px;display:flex;align-items:center;gap:8px;z-index:10;background:rgba(255,255,255,.10);border:1px solid rgba(255,255,255,.22);border-radius:16px;padding:8px 10px;backdrop-filter:blur(6px)}
-    .top-controls label{margin:0;color:#fff;font-size:12px;font-weight:800;opacity:.98;white-space:nowrap}
-    .top-controls select{width:auto;min-width:245px;border:1px solid rgba(255,255,255,.48);background:rgba(255,255,255,.98);color:#111827;border-radius:12px;padding:8px 12px;font-weight:800;box-shadow:0 6px 14px rgba(0,0,0,.12)}
-    @media(max-width:900px){header{padding-top:86px}.top-controls{top:14px;left:18px;right:18px;justify-content:flex-end}.top-controls select{min-width:0;flex:1}}
+
+  
+    /* Seletor pequeno de idioma com bandeiras, posicionado no canto superior direito */
+    .top-controls{position:absolute;top:14px;right:18px;z-index:20;display:flex;align-items:center;gap:6px;background:transparent;border:0;padding:0;margin:0}
+    .top-controls label{margin:0;color:#fff;font-size:11px;font-weight:800;line-height:1;white-space:nowrap;text-shadow:0 1px 2px rgba(0,0,0,.18)}
+    .top-controls select#languageSelector{position:absolute!important;width:1px!important;height:1px!important;opacity:0!important;pointer-events:none!important;left:-9999px!important}
+    .language-mini{position:relative;width:116px;font-size:11px;font-weight:700;color:#111827}
+    .language-mini-button{width:116px;height:28px;border:1px solid #d7dce5;background:#fff;border-radius:8px;padding:4px 20px 4px 8px;display:flex;align-items:center;gap:6px;cursor:pointer;box-shadow:0 4px 12px rgba(0,0,0,.12);font-size:11px;font-weight:800;color:#111827;line-height:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;position:relative}
+    .language-mini-button:after{content:"▾";position:absolute;right:7px;top:50%;transform:translateY(-50%);font-size:9px;color:#4b5563}
+    .language-mini-menu{position:absolute;right:0;top:32px;width:116px;background:#fff;border:1px solid #d7dce5;border-radius:8px;box-shadow:0 10px 22px rgba(0,0,0,.18);padding:4px 0;display:none;max-height:260px;overflow:auto;z-index:9999}
+    .language-mini.open .language-mini-menu{display:block}
+    .language-mini-item{width:100%;border:0;background:#fff;color:#111827;padding:6px 8px;display:flex;align-items:center;gap:7px;font-size:11px;font-weight:700;text-align:left;cursor:pointer;line-height:1.1}
+    .language-mini-item:hover,.language-mini-item.active{background:#f3f4f6}
+    .language-flag{font-size:15px;line-height:1;display:inline-flex;width:18px;justify-content:center;flex:0 0 18px}
+    .language-name{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+    @media(max-width:900px){header{padding-top:64px}.top-controls{top:12px;right:14px}.language-mini,.language-mini-button,.language-mini-menu{width:108px}.top-controls label{font-size:10px}}
 
   </style>
 </head>
@@ -90,19 +103,22 @@
   <p>Página estática em HTML/CSS/JavaScript — sem backend. Ideal para diagnóstico rápido, DNS, IP/CIDR, URL/API, Vendor/SN ONT, conectividade e velocidade de internet.</p>
   <div class="top-controls">
     <label for="languageSelector">Idioma</label>
-    <select id="languageSelector" onchange="applySelectedLanguage()">
-      <option value="system">🖥️ Padrão do sistema</option>
-      <option value="en">🇮🇳 English</option>
-      <option value="zh">🇨🇳 中文</option>
-      <option value="hi">🇮🇳 हिन्दी</option>
-      <option value="es">🇲🇽 Español</option>
-      <option value="fr">🇨🇩 Français</option>
-      <option value="ar">🇪🇬 العربية</option>
-      <option value="bn">🇧🇩 বাংলা</option>
-      <option value="pt">🇧🇷 Português</option>
-      <option value="ru">🇷🇺 Русский</option>
-      <option value="ur">🇵🇰 اردو</option>
+    <select id="languageSelector" onchange="applySelectedLanguage()" aria-label="Idioma">
+      <option value="pt" data-flag="🇧🇷">Português</option>
+      <option value="en" data-flag="🇮🇳">English</option>
+      <option value="zh" data-flag="🇨🇳">中文</option>
+      <option value="hi" data-flag="🇮🇳">हिन्दी</option>
+      <option value="es" data-flag="🇲🇽">Español</option>
+      <option value="fr" data-flag="🇨🇩">Français</option>
+      <option value="ar" data-flag="🇪🇬">العربية</option>
+      <option value="bn" data-flag="🇧🇩">বাংলা</option>
+      <option value="ru" data-flag="🇷🇺">Русский</option>
+      <option value="ur" data-flag="🇵🇰">اردو</option>
     </select>
+    <div class="language-mini" id="languageMini" data-no-i18n>
+      <button type="button" class="language-mini-button" id="languageMiniButton" aria-haspopup="listbox" aria-expanded="false"><span class="language-flag">🇧🇷</span><span class="language-name">Português</span></button>
+      <div class="language-mini-menu" id="languageMiniMenu" role="listbox" aria-label="Idioma"></div>
+    </div>
   </div>
 </header>
 <div class="app">
@@ -546,36 +562,246 @@ document.addEventListener('DOMContentLoaded',installUniversalTranslator);
 </script>
 
 
+
 <script>
-/* Ajuste final do seletor de idioma: rótulo curto + bandeiras por maior país populacional */
+/* Ajuste final do seletor pequeno: sem "Padrão do sistema" e com bandeiras */
 (function(){
-  const FLAG_OPTIONS = {
-    system:'🖥️ Padrão do sistema',
-    en:'🇮🇳 English',
-    zh:'🇨🇳 中文',
-    hi:'🇮🇳 हिन्दी',
-    es:'🇲🇽 Español',
-    fr:'🇨🇩 Français',
-    ar:'🇪🇬 العربية',
-    bn:'🇧🇩 বাংলা',
-    pt:'🇧🇷 Português',
-    ru:'🇷🇺 Русский',
-    ur:'🇵🇰 اردو'
+  const LANGUAGE_META = {
+    pt:{flag:'🇧🇷',label:'Português'},
+    en:{flag:'🇮🇳',label:'English'},
+    zh:{flag:'🇨🇳',label:'中文'},
+    hi:{flag:'🇮🇳',label:'हिन्दी'},
+    es:{flag:'🇲🇽',label:'Español'},
+    fr:{flag:'🇨🇩',label:'Français'},
+    ar:{flag:'🇪🇬',label:'العربية'},
+    bn:{flag:'🇧🇩',label:'বাংলা'},
+    ru:{flag:'🇷🇺',label:'Русский'},
+    ur:{flag:'🇵🇰',label:'اردو'}
   };
-  const LABEL_TRANSLATIONS = {
-    en:'Language', zh:'语言', hi:'भाषा', es:'Idioma', fr:'Langue', ar:'اللغة', bn:'ভাষা', pt:'Idioma', ru:'Язык', ur:'زبان'
-  };
-  function langNow(){const sel=document.getElementById('languageSelector');const v=sel?sel.value:'system';return v==='system'?(navigator.language||'pt').slice(0,2).toLowerCase():v;}
-  function applyLanguageSelectorPolish(){
-    const label=document.querySelector('label[for="languageSelector"]');
-    if(label){label.textContent=LABEL_TRANSLATIONS[langNow()]||'Idioma';label.dataset.i18nOriginalText='Idioma';}
-    const sel=document.getElementById('languageSelector');
-    if(sel){Object.entries(FLAG_OPTIONS).forEach(([value,text])=>{const opt=sel.querySelector('option[value="'+value+'"]');if(opt){opt.textContent=text;opt.dataset.i18nOriginalText=text;}});}
+  const LABEL_TRANSLATIONS = {en:'Language',zh:'语言',hi:'भाषा',es:'Idioma',fr:'Langue',ar:'اللغة',bn:'ভাষা',pt:'Idioma',ru:'Язык',ur:'زبان'};
+  function supportedSystemLanguage(){
+    const raw=(navigator.language||navigator.userLanguage||'pt').slice(0,2).toLowerCase();
+    return LANGUAGE_META[raw] ? raw : 'pt';
   }
-  document.addEventListener('DOMContentLoaded',applyLanguageSelectorPolish);
+  function getSelectedLanguage(){
+    const sel=document.getElementById('languageSelector');
+    const value=sel && LANGUAGE_META[sel.value] ? sel.value : supportedSystemLanguage();
+    return value;
+  }
+  function setMiniButton(lang){
+    const meta=LANGUAGE_META[lang]||LANGUAGE_META.pt;
+    const btn=document.getElementById('languageMiniButton');
+    if(btn){
+      btn.innerHTML='<span class="language-flag">'+meta.flag+'</span><span class="language-name">'+meta.label+'</span>';
+    }
+    const label=document.querySelector('label[for="languageSelector"]');
+    if(label){
+      label.textContent=LABEL_TRANSLATIONS[lang]||'Idioma';
+      label.dataset.i18nOriginalText='Idioma';
+    }
+  }
+  function buildMiniMenu(){
+    const menu=document.getElementById('languageMiniMenu');
+    if(!menu) return;
+    menu.innerHTML='';
+    Object.entries(LANGUAGE_META).forEach(([lang,meta])=>{
+      const item=document.createElement('button');
+      item.type='button';
+      item.className='language-mini-item';
+      item.setAttribute('role','option');
+      item.dataset.lang=lang;
+      item.innerHTML='<span class="language-flag">'+meta.flag+'</span><span class="language-name">'+meta.label+'</span>';
+      item.addEventListener('click',()=>{
+        const sel=document.getElementById('languageSelector');
+        if(sel) sel.value=lang;
+        localStorage.setItem('centralRedeLang',lang);
+        if(typeof window.applySelectedLanguage==='function') window.applySelectedLanguage();
+        polishLanguageSelector();
+        closeMiniMenu();
+      });
+      menu.appendChild(item);
+    });
+  }
+  function closeMiniMenu(){
+    const wrap=document.getElementById('languageMini');
+    const btn=document.getElementById('languageMiniButton');
+    if(wrap) wrap.classList.remove('open');
+    if(btn) btn.setAttribute('aria-expanded','false');
+  }
+  function toggleMiniMenu(){
+    const wrap=document.getElementById('languageMini');
+    const btn=document.getElementById('languageMiniButton');
+    if(!wrap) return;
+    wrap.classList.toggle('open');
+    if(btn) btn.setAttribute('aria-expanded',wrap.classList.contains('open')?'true':'false');
+  }
+  function polishLanguageSelector(){
+    const sel=document.getElementById('languageSelector');
+    if(!sel) return;
+    let saved=localStorage.getItem('centralRedeLang');
+    if(saved==='system' || !LANGUAGE_META[saved]){
+      saved=supportedSystemLanguage();
+      localStorage.setItem('centralRedeLang',saved);
+    }
+    if(!LANGUAGE_META[sel.value]) sel.value=saved;
+    Array.from(sel.options).forEach(opt=>{
+      const meta=LANGUAGE_META[opt.value];
+      if(meta){
+        opt.textContent=meta.flag+' '+meta.label;
+        opt.dataset.i18nOriginalText=meta.flag+' '+meta.label;
+      }
+    });
+    setMiniButton(getSelectedLanguage());
+    document.querySelectorAll('.language-mini-item').forEach(item=>item.classList.toggle('active',item.dataset.lang===getSelectedLanguage()));
+  }
+  function installMiniSelector(){
+    const sel=document.getElementById('languageSelector');
+    if(!sel) return;
+    let saved=localStorage.getItem('centralRedeLang');
+    if(saved==='system' || !LANGUAGE_META[saved]) saved=supportedSystemLanguage();
+    sel.value=saved;
+    localStorage.setItem('centralRedeLang',saved);
+    buildMiniMenu();
+    polishLanguageSelector();
+    const btn=document.getElementById('languageMiniButton');
+    if(btn){
+      btn.onclick=function(e){e.stopPropagation();toggleMiniMenu();};
+    }
+    document.addEventListener('click',closeMiniMenu);
+    if(typeof window.translateElementTree==='function') window.translateElementTree(document.body);
+  }
+  const oldCurrent=window.currentI18nLang;
+  window.currentI18nLang=function(){return getSelectedLanguage();};
   const oldApply=window.applySelectedLanguage;
-  window.applySelectedLanguage=function(){ if(typeof oldApply==='function') oldApply(); applyLanguageSelectorPolish(); };
-  window.applyLanguageSelectorPolish=applyLanguageSelectorPolish;
+  window.applySelectedLanguage=function(){
+    const sel=document.getElementById('languageSelector');
+    if(sel && !LANGUAGE_META[sel.value]) sel.value=supportedSystemLanguage();
+    localStorage.setItem('centralRedeLang',getSelectedLanguage());
+    if(typeof oldApply==='function') oldApply();
+    if(typeof window.translateElementTree==='function') window.translateElementTree(document.body);
+    polishLanguageSelector();
+  };
+  document.addEventListener('DOMContentLoaded',installMiniSelector);
+  window.polishLanguageSelector=polishLanguageSelector;
+})();
+</script>
+
+
+<script>
+/* ===== Ajustes de compatibilidade para GitHub Pages =====
+   Objetivo: manter a página 100% estática, sem backend, evitando travamentos por mixed content/CORS.
+*/
+(function(){
+  window.GITHUB_PAGES_COMPAT = true;
+
+  function isHttpBlockedByHttps(url){
+    return location.protocol === 'https:' && /^http:\/\//i.test(String(url||''));
+  }
+  function mixedContentMessage(url){
+    return 'Bloqueado pelo navegador em publicação HTTPS/GitHub Pages: URLs HTTP não podem ser chamadas diretamente. Use HTTPS ou teste localmente. URL: '+url;
+  }
+  function safeSetResult(id, text){
+    if(typeof setResult === 'function') setResult(id, text);
+    else { const el=document.getElementById(id); if(el) el.textContent=text; }
+  }
+
+  // Captura erros assíncronos para facilitar diagnóstico sem quebrar a interface.
+  window.addEventListener('error', function(ev){ console.warn('Erro capturado na página:', ev.message || ev.error); });
+  window.addEventListener('unhandledrejection', function(ev){ console.warn('Promise rejeitada capturada:', ev.reason); });
+
+  // Reforço do timedFetch usado em diagnóstico HTTP.
+  const originalTimedFetch = window.timedFetch;
+  window.timedFetch = async function(url, options={}){
+    if(isHttpBlockedByHttps(url)) throw new Error(mixedContentMessage(url));
+    const start = performance.now();
+    const resp = await fetch(url,{cache:'no-store',mode:'cors',...options});
+    const end = performance.now();
+    return {resp, ms:end-start};
+  };
+
+  // Reforço do teste de download para GitHub Pages/HTTPS.
+  window.downloadTest = async function(){
+    const url=document.getElementById('downloadUrl').value.trim();
+    if(isHttpBlockedByHttps(url)){
+      safeSetResult('downloadResult', mixedContentMessage(url));
+      return;
+    }
+    const start=performance.now();
+    try{
+      const r=await fetch(url,{cache:'no-store'});
+      const blob=await r.blob();
+      const sec=(performance.now()-start)/1000;
+      const mbits=(blob.size*8/1e6)/sec;
+      const dm=document.getElementById('downMetric'); if(dm) dm.textContent=mbits.toFixed(1)+' Mbps';
+      const out=`Status: ${r.status}\nBytes: ${blob.size}\nTempo: ${sec.toFixed(2)} s\nVelocidade estimada: ${mbits.toFixed(2)} Mbps`;
+      safeSetResult('downloadResult',out);
+      if(typeof addToReport==='function') addToReport('Teste de download',out);
+    }catch(e){
+      safeSetResult('downloadResult','Falha: '+e.message+'\nObservação: em GitHub Pages, o servidor de destino precisa permitir CORS para leitura pelo navegador.');
+    }
+  };
+
+  // Reforço do teste de URL/API para bloquear HTTP em HTTPS e orientar CORS.
+  window.urlApiTest = async function(){
+    const url=document.getElementById('urlTest').value.trim();
+    const method=document.getElementById('urlMethod').value;
+    const body=document.getElementById('urlBody').value.trim();
+    if(isHttpBlockedByHttps(url)){
+      safeSetResult('urlResult', mixedContentMessage(url));
+      return;
+    }
+    let opts={method,cache:'no-store'};
+    if(method==='POST'&&body){opts.headers={'Content-Type':'application/json'};opts.body=body;}
+    const start=performance.now();
+    try{
+      const r=await fetch(url,opts);
+      const ms=performance.now()-start;
+      let text=await r.text();
+      let short=text.slice(0,3000);
+      const out=`URL: ${url}\nMétodo: ${method}\nStatus: ${r.status} ${r.statusText}\nTempo: ${ms.toFixed(1)} ms\nCORS: permitido para leitura pelo navegador\nContent-Type: ${r.headers.get('content-type')}\n\nResposta parcial:\n${short}`;
+      safeSetResult('urlResult',out);
+      if(typeof addToReport==='function') addToReport('URL/API',out);
+    }catch(e){
+      safeSetResult('urlResult',`Falha: ${e.message}\nPossíveis causas em GitHub Pages: CORS bloqueado pelo servidor de destino, certificado inválido, endpoint indisponível, rede sem acesso ou tentativa de usar HTTP em página HTTPS.`);
+    }
+  };
+
+  // Reforço do teste de porta para não disparar fetch HTTP bloqueado em GitHub Pages HTTPS.
+  window.testTcpLike = async function(host,port){
+    const candidates=[];
+    if(port===443||port===8443)candidates.push('https://'+host+':'+port+'/');
+    if(port===80||port===8080)candidates.push('http://'+host+':'+port+'/');
+    if(!candidates.length)candidates.push('http://'+host+':'+port+'/');
+    let last='';
+    for(const url of candidates){
+      if(isHttpBlockedByHttps(url)){
+        last=mixedContentMessage(url);
+        continue;
+      }
+      const ctrl=new AbortController();
+      const t=setTimeout(()=>ctrl.abort(),3500);
+      try{
+        const st=performance.now();
+        await fetch(url,{mode:'no-cors',cache:'no-store',signal:ctrl.signal});
+        clearTimeout(t);
+        return{status:'Possivelmente aberta/responde HTTP/HTTPS',tempo:(performance.now()-st).toFixed(1)+' ms',url};
+      }catch(e){
+        clearTimeout(t);
+        last=e.message;
+      }
+    }
+    return{status:'Não testável no navegador/GitHub Pages ou bloqueada',tempo:'N/D',url:candidates.join(' / '),erro:last};
+  };
+
+  // Garante idioma real do sistema quando valor antigo estava salvo como "system".
+  try{
+    const available=['pt','en','zh','hi','es','fr','ar','bn','ru','ur'];
+    let saved=localStorage.getItem('centralRedeLang');
+    if(saved==='system' || !available.includes(saved)){
+      const sys=(navigator.language||'pt').slice(0,2).toLowerCase();
+      localStorage.setItem('centralRedeLang', available.includes(sys)?sys:'pt');
+    }
+  }catch(e){ console.warn('localStorage indisponível:', e.message); }
 })();
 </script>
 
