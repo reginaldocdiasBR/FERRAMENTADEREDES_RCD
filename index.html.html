@@ -2,7 +2,7 @@
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, viewport-fit=cover" />
   <meta name="referrer" content="strict-origin-when-cross-origin" />
   <title>Central de Ferramentas de Rede - Sem Backend</title>
   <!-- Ajustes para experiência semelhante a aplicativo em celulares -->
@@ -104,7 +104,8 @@
 
 
     /* =========================================================
-       AJUSTE MOBILE APP-LIKE - preserva layout desktop original
+       MOBILE PORTRAIT APP-LIKE V2
+       Mantém o desktop original e reestrutura apenas celular em pé
        ========================================================= */
     html{
       width:100%;
@@ -117,276 +118,303 @@
       min-height:100vh;
       min-height:100dvh;
       overflow-x:hidden;
-      padding:0;
+      overscroll-behavior-y:contain;
     }
     img,svg,canvas,video,iframe{max-width:100%;height:auto}
-    button,input,select,textarea{-webkit-tap-highlight-color:transparent}
+    button,input,select,textarea{-webkit-tap-highlight-color:transparent;touch-action:manipulation}
+    .mobile-tool-select{display:none}
 
-    @media(max-width:768px){
+    @media(max-width:700px){
+      *{min-width:0}
       :root{
         --radius:16px;
-        --shadow:0 6px 18px rgba(0,0,0,.08);
+        --shadow:0 6px 16px rgba(0,0,0,.08);
       }
       body{
         background:#f2f3f5;
         font-size:15px;
-        padding-bottom:env(safe-area-inset-bottom);
-      }
-      header{
-        position:sticky;
-        top:0;
-        z-index:1000;
-        min-height:auto;
-        padding:calc(14px + env(safe-area-inset-top)) 12px 14px;
-        border-radius:0 0 22px 22px;
-      }
-      header h1{
-        font-size:18px;
-        line-height:1.18;
-        max-width:calc(100% - 124px);
-        padding-right:6px;
-      }
-      header p{
-        font-size:12px;
-        line-height:1.35;
-        margin-top:8px;
-        max-width:100%;
-      }
-      .top-controls{
-        top:calc(10px + env(safe-area-inset-top));
-        right:10px;
-      }
-      .top-controls label{display:none}
-      .language-mini,.language-mini-button,.language-mini-menu{width:106px}
-      .language-mini-button{
-        height:32px;
-        border-radius:999px;
-        box-shadow:0 5px 14px rgba(0,0,0,.20);
-      }
-      .language-mini-menu{
-        max-height:60vh;
-        border-radius:14px;
+        padding-bottom:calc(10px + env(safe-area-inset-bottom));
       }
 
+      /* Cabeçalho compacto para celular em pé */
+      header{
+        position:relative!important;
+        min-height:auto!important;
+        padding:calc(12px + env(safe-area-inset-top)) 12px 12px!important;
+        border-radius:0 0 22px 22px;
+        box-shadow:0 8px 18px rgba(0,0,0,.14);
+      }
+      header h1{
+        width:100%;
+        max-width:calc(100% - 118px);
+        font-size:17px!important;
+        line-height:1.18!important;
+        letter-spacing:0!important;
+        margin:0!important;
+      }
+      header p{
+        display:-webkit-box;
+        -webkit-line-clamp:2;
+        -webkit-box-orient:vertical;
+        overflow:hidden;
+        font-size:11.5px!important;
+        line-height:1.32!important;
+        margin-top:7px!important;
+        padding-right:2px;
+      }
+      .top-controls{
+        top:calc(9px + env(safe-area-inset-top))!important;
+        right:10px!important;
+      }
+      .top-controls label{display:none!important}
+      .language-mini,.language-mini-button,.language-mini-menu{width:104px!important}
+      .language-mini-button{
+        height:32px!important;
+        border-radius:999px!important;
+        box-shadow:0 6px 16px rgba(0,0,0,.22)!important;
+      }
+      .language-mini-menu{
+        max-height:58vh!important;
+        border-radius:14px!important;
+        right:0!important;
+      }
+
+      /* No celular em pé, troca o menu lateral por seletor fixo de ferramenta */
       .app{
-        display:block;
-        min-height:auto;
+        display:block!important;
+        min-height:auto!important;
+        width:100%!important;
       }
       aside{
+        display:none!important;
+      }
+      .mobile-tool-select{
+        display:block;
         position:sticky;
-        top:calc(88px + env(safe-area-inset-top));
-        z-index:900;
-        height:auto;
-        max-height:none;
-        padding:8px 8px 10px;
-        border-right:0;
-        border-bottom:1px solid var(--line);
-        background:rgba(255,255,255,.96);
+        top:0;
+        z-index:950;
+        background:rgba(242,243,245,.96);
         backdrop-filter:blur(10px);
-        overflow-x:auto;
-        overflow-y:hidden;
-        white-space:nowrap;
-        display:flex;
-        gap:8px;
-        align-items:center;
-        scrollbar-width:none;
-        box-shadow:0 6px 16px rgba(0,0,0,.06);
+        padding:10px 10px 8px;
+        border-bottom:1px solid #e5e7eb;
       }
-      aside::-webkit-scrollbar{display:none}
-      aside .brand,
-      aside hr,
-      aside .muted{display:none!important}
-      .nav-btn{
-        width:auto;
-        flex:0 0 auto;
-        min-height:42px;
-        padding:10px 12px;
-        margin:0;
+      .mobile-tool-select label{
+        margin:0 0 5px;
+        font-size:11px;
+        color:#6b7280;
+        font-weight:800;
+        text-transform:uppercase;
+        letter-spacing:.04em;
+      }
+      .mobile-tool-select select{
+        width:100%;
+        height:46px;
         border-radius:999px;
-        font-size:13px;
-        background:#f8fafc;
-        border:1px solid #e5e7eb;
-        box-shadow:none;
-      }
-      .nav-btn.active{
-        background:var(--claro-red);
-        color:#fff;
-        border-color:var(--claro-red);
+        border:1px solid rgba(218,41,28,.30);
+        background:#fff;
+        color:#111827;
+        font-size:15px;
+        font-weight:800;
+        padding:0 14px;
+        box-shadow:0 6px 14px rgba(0,0,0,.08);
       }
 
       .main{
-        padding:12px 10px 18px;
-        overflow:visible;
+        width:100%!important;
+        padding:10px 9px 18px!important;
+        overflow:visible!important;
       }
       .grid{
-        display:block;
+        display:block!important;
+        width:100%!important;
       }
-      .card,
-      .metric,
-      .col-12,.col-8,.col-6,.col-4,.col-3{
-        width:100%;
-        grid-column:span 12;
+      .col-12,.col-8,.col-6,.col-4,.col-3,.card,.metric{
+        grid-column:span 12!important;
+        width:100%!important;
+        max-width:100%!important;
       }
       .card{
-        padding:14px;
-        margin:0 0 12px;
-        border-radius:18px;
+        margin:0 0 10px!important;
+        padding:13px!important;
+        border-radius:17px!important;
+        overflow:hidden;
+        box-shadow:0 5px 14px rgba(0,0,0,.07)!important;
       }
       .card h2{
-        font-size:20px;
-        line-height:1.22;
+        font-size:18px!important;
+        line-height:1.22!important;
+        margin-bottom:7px!important;
       }
       .card h3{
-        font-size:16px;
-        line-height:1.25;
+        font-size:15.5px!important;
+        line-height:1.25!important;
       }
-      .muted{font-size:12.5px}
+      .muted{font-size:12px!important;line-height:1.42!important}
 
-      label{font-size:13px;margin-top:8px}
+      label{font-size:12.5px!important;margin:8px 0 5px!important}
       input,select,textarea{
-        min-height:44px;
-        font-size:16px; /* evita zoom automático no iOS */
-        border-radius:14px;
-        padding:11px 12px;
+        width:100%!important;
+        min-height:44px!important;
+        font-size:16px!important; /* evita zoom automático em iOS/Android */
+        border-radius:14px!important;
+        padding:10px 12px!important;
       }
       textarea{
-        min-height:128px;
+        min-height:118px!important;
+        line-height:1.35!important;
       }
       .btn-row{
-        display:grid;
-        grid-template-columns:1fr;
-        gap:8px;
+        display:grid!important;
+        grid-template-columns:1fr!important;
+        gap:8px!important;
+        margin-top:10px!important;
       }
-      button.action,
-      button.secondary,
-      button.ghost,
-      button.green{
-        width:100%;
-        min-height:44px;
-        border-radius:14px;
-        padding:11px 12px;
-        font-size:14px;
+      button.action,button.secondary,button.ghost,button.green{
+        width:100%!important;
+        min-height:44px!important;
+        border-radius:14px!important;
+        padding:10px 12px!important;
+        font-size:14px!important;
       }
 
-      .result{
-        padding:14px;
-        font-size:13px;
-        border-radius:16px;
-        max-width:100%;
-        overflow:auto;
-        -webkit-overflow-scrolling:touch;
+      /* Métricas em cards legíveis no modo retrato */
+      .metric{
+        display:flex!important;
+        align-items:center!important;
+        justify-content:space-between!important;
+        gap:10px!important;
+        min-height:72px;
       }
-      .result h3,
-      .result .visual-heading{
-        font-size:20px;
-        margin-bottom:12px;
-        line-height:1.2;
+      .metric .num{font-size:21px!important;white-space:nowrap!important}
+      .metric .lbl{text-align:right!important;font-size:11.5px!important}
+
+      /* Resultado responsivo: tabelas viram blocos, sem "zoom out" da página */
+      .result{
+        width:100%!important;
+        max-width:100%!important;
+        padding:13px!important;
+        margin-top:10px!important;
+        font-size:13px!important;
+        line-height:1.38!important;
+        border-radius:15px!important;
+        overflow:hidden!important;
+        word-break:break-word!important;
+      }
+      .result h3,.result .visual-heading{
+        font-size:18px!important;
+        line-height:1.18!important;
+        margin:0 0 12px!important;
       }
       .result .visual-table,
-      .kv,
-      .batch-table{
-        display:block;
-        width:100%;
-        overflow-x:auto;
-        -webkit-overflow-scrolling:touch;
-      }
-      .result .visual-table .k,
-      .kv .k{
-        width:118px;
-        min-width:118px;
-        font-size:10px;
-      }
+      .result .visual-table tbody,
+      .result .visual-table tr,
       .result .visual-table td,
-      .kv td{
-        padding:8px 6px;
+      .kv,.kv tbody,.kv tr,.kv td{
+        display:block!important;
+        width:100%!important;
       }
-      .result .visual-raw{
-        font-size:12px;
-        max-width:100%;
+      .result .visual-table tr,.kv tr{
+        border-bottom:1px solid #e5e7eb!important;
+        padding:8px 0!important;
+      }
+      .result .visual-table td,.kv td{
+        padding:2px 0!important;
+      }
+      .result .visual-table .k,.kv .k{
+        width:100%!important;
+        min-width:0!important;
+        font-size:10px!important;
+        color:#6b7280!important;
+      }
+      .result .visual-table .v,.kv .v{
+        width:100%!important;
+        font-size:13px!important;
+        color:#111827!important;
+        overflow-wrap:anywhere!important;
+        word-break:break-word!important;
+      }
+      .result .visual-raw,pre,.mono{
+        white-space:pre-wrap!important;
+        overflow-wrap:anywhere!important;
+        word-break:break-word!important;
+        font-size:12px!important;
+      }
+      .batch-table{
+        display:block!important;
+        overflow-x:auto!important;
+        -webkit-overflow-scrolling:touch!important;
+        width:100%!important;
       }
       .batch-table th,.batch-table td{
-        min-width:112px;
+        min-width:105px!important;
+        font-size:11px!important;
       }
 
-      .metric{
-        display:flex;
-        align-items:center;
-        justify-content:space-between;
-        gap:10px;
-      }
-      .metric .num{
-        font-size:22px;
-        white-space:nowrap;
-      }
-      .metric .lbl{
-        text-align:right;
-      }
-
+      /* Velocímetro ajustado especificamente para celular em pé */
       .speed-hero{
-        border-radius:22px;
-        padding:16px;
+        padding:14px!important;
+        border-radius:21px!important;
       }
       .speed-top{
-        gap:10px;
+        display:block!important;
       }
-      .speed-title{
-        font-size:20px;
-      }
+      .speed-title{font-size:19px!important}
+      .speed-sub{font-size:11.5px!important}
       .speed-server{
-        text-align:left;
-        font-size:11px;
+        text-align:left!important;
+        font-size:11px!important;
+        margin-top:8px;
       }
-      .speed-gauge-wrap{
-        margin:14px 0;
-      }
+      .speed-gauge-wrap{margin:13px 0!important}
       .speed-gauge{
-        width:min(72vw,230px);
-        height:min(72vw,230px);
+        width:min(68vw,218px)!important;
+        height:min(68vw,218px)!important;
       }
       .speed-gauge-inner{
-        width:calc(min(72vw,230px) - 58px);
-        height:calc(min(72vw,230px) - 58px);
+        width:calc(min(68vw,218px) - 56px)!important;
+        height:calc(min(68vw,218px) - 56px)!important;
       }
       .speed-start{
-        width:76px;
-        height:76px;
-        font-size:14px;
+        width:70px!important;
+        height:70px!important;
+        font-size:13px!important;
       }
-      .speed-main-value{
-        font-size:30px;
-      }
-      .speed-card-grid,
-      .speed-options{
-        grid-template-columns:1fr;
-        gap:10px;
+      .speed-main-value{font-size:27px!important}
+      .speed-main-unit{font-size:11px!important}
+      .speed-phase{font-size:10px!important;margin-top:7px!important}
+      .speed-card-grid,.speed-options{
+        display:grid!important;
+        grid-template-columns:1fr!important;
+        gap:9px!important;
       }
       .speed-metric-card{
-        border-radius:16px;
-        padding:14px;
+        border-radius:15px!important;
+        padding:13px!important;
       }
-      .speed-metric-value{
-        font-size:24px;
-      }
+      .speed-metric-value{font-size:22px!important}
+
       footer{
-        padding:18px 10px calc(18px + env(safe-area-inset-bottom));
+        padding:16px 8px calc(18px + env(safe-area-inset-bottom))!important;
+        font-size:11px!important;
       }
     }
 
-    @media(max-width:420px){
-      header h1{font-size:16px;max-width:calc(100% - 112px)}
-      header p{font-size:11.5px}
-      .nav-btn{font-size:12px;padding:9px 10px;min-height:40px}
-      .main{padding-left:8px;padding-right:8px}
-      .card{padding:12px;border-radius:16px}
-      .card h2{font-size:18px}
-      .result .visual-heading{font-size:18px}
-      .result .visual-table .k,.kv .k{width:104px;min-width:104px}
-      .speed-main-value{font-size:26px}
+    @media(max-width:380px){
+      header h1{font-size:15.5px!important;max-width:calc(100% - 108px)}
+      header p{font-size:11px!important}
+      .main{padding-left:7px!important;padding-right:7px!important}
+      .card{padding:11px!important;border-radius:15px!important}
+      .mobile-tool-select{padding-left:8px;padding-right:8px}
+      .mobile-tool-select select{font-size:14px!important}
+      .speed-gauge{width:min(66vw,200px)!important;height:min(66vw,200px)!important}
+      .speed-gauge-inner{width:calc(min(66vw,200px) - 52px)!important;height:calc(min(66vw,200px) - 52px)!important}
     }
 
     @media(orientation:landscape) and (max-height:520px){
-      header{position:relative;border-radius:0}
-      aside{top:0}
+      header{position:relative!important;border-radius:0!important}
+      aside{display:flex!important;position:sticky!important;top:0!important;height:auto!important;overflow-x:auto!important;white-space:nowrap!important}
+      aside .brand, aside hr, aside .muted{display:none!important}
+      .mobile-tool-select{display:none!important}
     }
 
   </style>
@@ -1101,25 +1129,60 @@ document.addEventListener('DOMContentLoaded',installUniversalTranslator);
 
 
 <script>
-/* Ajustes de usabilidade mobile sem alterar as funções originais */
+/* Menu mobile em formato de aplicativo - criado sem alterar as ferramentas originais */
 (function(){
+  function cleanLabel(txt){
+    return String(txt || '').replace(/\s+/g,' ').trim();
+  }
+  function ensureMobileToolSelector(){
+    if(document.getElementById('mobileToolSelectWrap')) return;
+    var app = document.querySelector('.app');
+    var main = document.querySelector('.main');
+    var navButtons = Array.prototype.slice.call(document.querySelectorAll('.nav-btn'));
+    if(!app || !main || !navButtons.length) return;
+
+    var wrap = document.createElement('div');
+    wrap.className = 'mobile-tool-select';
+    wrap.id = 'mobileToolSelectWrap';
+    wrap.innerHTML = '<label for="mobileToolSelect">Ferramenta</label><select id="mobileToolSelect" aria-label="Selecionar ferramenta"></select>';
+    app.insertBefore(wrap, main);
+
+    var select = wrap.querySelector('select');
+    navButtons.forEach(function(btn){
+      var opt = document.createElement('option');
+      opt.value = btn.getAttribute('data-tab');
+      opt.textContent = cleanLabel(btn.textContent);
+      if(btn.classList.contains('active')) opt.selected = true;
+      select.appendChild(opt);
+    });
+
+    select.addEventListener('change', function(){
+      var btn = document.querySelector('.nav-btn[data-tab="' + CSS.escape(select.value) + '"]');
+      if(btn){
+        btn.click();
+        setTimeout(function(){ window.scrollTo({top:0, behavior:'smooth'}); }, 60);
+      }
+    });
+
+    navButtons.forEach(function(btn){
+      btn.addEventListener('click', function(){
+        if(select.value !== btn.getAttribute('data-tab')) select.value = btn.getAttribute('data-tab');
+      });
+    });
+  }
+
   function setAppViewportHeight(){
     document.documentElement.style.setProperty('--app-vh', (window.innerHeight * 0.01) + 'px');
+  }
+
+  if(document.readyState === 'loading'){
+    document.addEventListener('DOMContentLoaded', ensureMobileToolSelector);
+  }else{
+    ensureMobileToolSelector();
   }
   setAppViewportHeight();
   window.addEventListener('resize', setAppViewportHeight, {passive:true});
   window.addEventListener('orientationchange', function(){ setTimeout(setAppViewportHeight, 250); }, {passive:true});
-
-  function keepActiveTabVisible(btn){
-    if(!btn || window.innerWidth > 768) return;
-    setTimeout(function(){
-      try{ btn.scrollIntoView({behavior:'smooth', inline:'center', block:'nearest'}); }catch(e){}
-      try{ window.scrollTo({top:0, behavior:'smooth'}); }catch(e){}
-    }, 80);
-  }
-  document.querySelectorAll('.nav-btn').forEach(function(btn){
-    btn.addEventListener('click', function(){ keepActiveTabVisible(btn); }, {passive:true});
-  });
 })();
 </script>
 
