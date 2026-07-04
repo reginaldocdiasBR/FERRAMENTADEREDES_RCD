@@ -2,7 +2,9 @@
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, viewport-fit=cover" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, viewport-fit=cover, interactive-widget=resizes-content" />
+  <meta name="format-detection" content="telephone=no, date=no, email=no, address=no" />
+  <meta name="msapplication-tap-highlight" content="no" />
   <meta name="referrer" content="strict-origin-when-cross-origin" />
   <title>Central de Ferramentas de Rede - Sem Backend</title>
   <!-- Ajustes para experiência semelhante a aplicativo em celulares -->
@@ -415,6 +417,254 @@
       aside{display:flex!important;position:sticky!important;top:0!important;height:auto!important;overflow-x:auto!important;white-space:nowrap!important}
       aside .brand, aside hr, aside .muted{display:none!important}
       .mobile-tool-select{display:none!important}
+    }
+
+  
+
+    /* =========================================================
+       MOBILE WEB APP FINAL - responsivo em smartphone retrato
+       Inserido para comportamento de aplicativo mobile sem backend
+       ========================================================= */
+    :root{
+      --mobile-bottom-nav-h:74px;
+      --mobile-safe-bottom:env(safe-area-inset-bottom, 0px);
+      --mobile-safe-top:env(safe-area-inset-top, 0px);
+      --touch-target:48px;
+    }
+    html,body{
+      width:100%;
+      max-width:100%;
+      overflow-x:hidden!important;
+    }
+    body{
+      -webkit-font-smoothing:antialiased;
+      text-rendering:optimizeLegibility;
+    }
+    a,button,input,select,textarea{
+      -webkit-tap-highlight-color:rgba(218,41,28,.16);
+    }
+    .mobile-bottom-nav,
+    .mobile-more-sheet,
+    .mobile-more-backdrop{display:none;}
+
+    @media(max-width:768px){
+      html{
+        min-height:calc(var(--app-vh, 1vh) * 100);
+        overflow-x:hidden!important;
+      }
+      body{
+        min-height:calc(var(--app-vh, 1vh) * 100);
+        overflow-x:hidden!important;
+        padding-bottom:calc(var(--mobile-bottom-nav-h) + var(--mobile-safe-bottom) + 12px)!important;
+        background:#f4f5f7!important;
+        font-size:16px!important;
+      }
+      body.mobile-sheet-open{overflow:hidden!important;}
+      body::after{
+        content:"";
+        position:fixed;
+        left:0;right:0;bottom:0;
+        height:calc(var(--mobile-bottom-nav-h) + var(--mobile-safe-bottom));
+        pointer-events:none;
+        background:linear-gradient(to top, rgba(244,245,247,1), rgba(244,245,247,0));
+        z-index:899;
+      }
+      header{
+        padding:calc(12px + var(--mobile-safe-top)) 12px 14px!important;
+        border-radius:0 0 22px 22px!important;
+      }
+      header h1{
+        font-size:clamp(16px,4.7vw,20px)!important;
+        max-width:calc(100% - 112px)!important;
+      }
+      header p{
+        font-size:12px!important;
+        max-width:100%!important;
+      }
+      .app,.main,.grid,.card,.result{
+        max-width:100%!important;
+        overflow-x:hidden!important;
+      }
+      .main{
+        padding:10px 10px 20px!important;
+      }
+      .grid{
+        grid-template-columns:1fr!important;
+        gap:10px!important;
+      }
+      .card{
+        border-radius:18px!important;
+        padding:14px!important;
+      }
+      input,select,textarea,button,.nav-btn,.language-mini-button{
+        min-height:var(--touch-target)!important;
+        font-size:16px!important;
+      }
+      button.action,button.secondary,button.ghost,button.green{
+        min-height:50px!important;
+        border-radius:15px!important;
+        font-size:15px!important;
+        display:inline-flex!important;
+        align-items:center!important;
+        justify-content:center!important;
+        gap:8px!important;
+      }
+      .btn-row{
+        grid-template-columns:1fr!important;
+      }
+      .result,.source-box,.warnbox{
+        overflow-wrap:anywhere!important;
+        word-break:break-word!important;
+      }
+      table{
+        max-width:100%!important;
+      }
+      pre,code,.mono,.visual-raw{
+        white-space:pre-wrap!important;
+        overflow-wrap:anywhere!important;
+      }
+      .mobile-tool-select{
+        top:0!important;
+        z-index:850!important;
+        padding:9px 10px 7px!important;
+      }
+      .mobile-tool-select select{
+        height:48px!important;
+        min-height:48px!important;
+      }
+
+      /* Barra inferior fixa estilo app */
+      .mobile-bottom-nav{
+        position:fixed;
+        left:0;
+        right:0;
+        bottom:0;
+        z-index:1000;
+        display:grid;
+        grid-template-columns:repeat(5,1fr);
+        gap:4px;
+        min-height:calc(var(--mobile-bottom-nav-h) + var(--mobile-safe-bottom));
+        padding:8px 8px calc(8px + var(--mobile-safe-bottom));
+        background:rgba(255,255,255,.94);
+        border-top:1px solid rgba(17,24,39,.10);
+        box-shadow:0 -12px 30px rgba(0,0,0,.14);
+        backdrop-filter:blur(18px);
+        -webkit-backdrop-filter:blur(18px);
+      }
+      .mobile-bottom-nav button{
+        appearance:none;
+        border:0;
+        min-width:0!important;
+        min-height:58px!important;
+        border-radius:18px;
+        background:transparent;
+        color:#5b6472;
+        display:flex;
+        flex-direction:column;
+        align-items:center;
+        justify-content:center;
+        gap:3px;
+        font-size:11px!important;
+        line-height:1.05;
+        font-weight:800;
+        cursor:pointer;
+        touch-action:manipulation;
+      }
+      .mobile-bottom-nav button .ico{font-size:20px;line-height:1;}
+      .mobile-bottom-nav button .txt{
+        max-width:100%;
+        overflow:hidden;
+        text-overflow:ellipsis;
+        white-space:nowrap;
+      }
+      .mobile-bottom-nav button.active{
+        color:var(--claro-red);
+        background:rgba(218,41,28,.10);
+        box-shadow:inset 0 0 0 1px rgba(218,41,28,.14);
+      }
+
+      /* Bottom sheet de ferramentas */
+      .mobile-more-backdrop{
+        position:fixed;
+        inset:0;
+        z-index:1001;
+        background:rgba(17,24,39,.45);
+        backdrop-filter:blur(4px);
+      }
+      .mobile-more-backdrop.open{display:block;}
+      .mobile-more-sheet{
+        position:fixed;
+        left:8px;
+        right:8px;
+        bottom:calc(var(--mobile-bottom-nav-h) + var(--mobile-safe-bottom) + 8px);
+        z-index:1002;
+        display:none;
+        max-height:min(72vh,560px);
+        overflow:auto;
+        -webkit-overflow-scrolling:touch;
+        background:#fff;
+        border:1px solid rgba(17,24,39,.10);
+        border-radius:24px;
+        box-shadow:0 24px 55px rgba(0,0,0,.26);
+        padding:14px;
+      }
+      .mobile-more-sheet.open{display:block;}
+      .mobile-more-title{
+        display:flex;
+        align-items:center;
+        justify-content:space-between;
+        gap:10px;
+        margin:0 0 10px;
+        font-size:16px;
+        font-weight:900;
+        color:#111827;
+      }
+      .mobile-more-close{
+        border:0;
+        background:#f3f4f6;
+        color:#111827;
+        width:44px;
+        height:44px;
+        border-radius:14px;
+        font-size:18px;
+        font-weight:900;
+      }
+      .mobile-more-grid{
+        display:grid;
+        grid-template-columns:1fr;
+        gap:8px;
+      }
+      .mobile-more-grid button{
+        width:100%;
+        min-height:50px!important;
+        border:1px solid #e5e7eb;
+        background:#fff;
+        color:#111827;
+        border-radius:15px;
+        padding:10px 12px;
+        display:flex;
+        align-items:center;
+        justify-content:flex-start;
+        gap:10px;
+        font-size:14px!important;
+        font-weight:800;
+        text-align:left;
+      }
+      .mobile-more-grid button.active{
+        color:var(--claro-red);
+        background:rgba(218,41,28,.08);
+        border-color:rgba(218,41,28,.22);
+      }
+      .mobile-more-grid button .ico{font-size:20px;width:24px;text-align:center;}
+      .mobile-more-grid button .txt{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+    }
+
+    @media(max-width:360px){
+      .mobile-bottom-nav{padding-left:5px;padding-right:5px;gap:2px;}
+      .mobile-bottom-nav button{font-size:10px!important;border-radius:15px;}
+      .mobile-bottom-nav button .ico{font-size:18px;}
+      header h1{max-width:calc(100% - 104px)!important;}
+      .language-mini,.language-mini-button,.language-mini-menu{width:98px!important;}
     }
 
   </style>
@@ -1183,6 +1433,147 @@ document.addEventListener('DOMContentLoaded',installUniversalTranslator);
   setAppViewportHeight();
   window.addEventListener('resize', setAppViewportHeight, {passive:true});
   window.addEventListener('orientationchange', function(){ setTimeout(setAppViewportHeight, 250); }, {passive:true});
+})();
+</script>
+
+
+<script>
+/* MOBILE WEB APP FINAL: bottom navigation + sync com menu original */
+(function(){
+  function safeCssEscape(value){
+    if(window.CSS && typeof CSS.escape === 'function') return CSS.escape(value);
+    return String(value).replace(/[^a-zA-Z0-9_-]/g, '\\$&');
+  }
+  function cleanLabel(text){
+    return String(text || '').replace(/\s+/g,' ').trim();
+  }
+  function splitIconAndText(label){
+    var m = cleanLabel(label).match(/^([^\wÀ-ÿ]+)\s*(.*)$/u);
+    if(m) return {ico:m[1].trim() || '●', txt:m[2].trim() || cleanLabel(label)};
+    return {ico:'●', txt:cleanLabel(label)};
+  }
+  function getNavButtons(){
+    return Array.prototype.slice.call(document.querySelectorAll('aside .nav-btn[data-tab]'));
+  }
+  function activateTab(tab){
+    var btn = document.querySelector('aside .nav-btn[data-tab="' + safeCssEscape(tab) + '"]');
+    if(btn){
+      btn.click();
+      syncMobileActive(tab);
+      setTimeout(function(){ window.scrollTo({top:0, behavior:'smooth'}); }, 40);
+    }
+  }
+  function syncMobileActive(tab){
+    document.querySelectorAll('.mobile-bottom-nav button[data-tab], .mobile-more-grid button[data-tab]').forEach(function(b){
+      b.classList.toggle('active', b.getAttribute('data-tab') === tab);
+    });
+    var sel = document.getElementById('mobileToolSelect');
+    if(sel && sel.value !== tab) sel.value = tab;
+  }
+  function currentTab(){
+    var active = document.querySelector('aside .nav-btn.active[data-tab]');
+    return active ? active.getAttribute('data-tab') : 'diag';
+  }
+  function closeSheet(){
+    document.body.classList.remove('mobile-sheet-open');
+    var sheet = document.getElementById('mobileMoreSheet');
+    var backdrop = document.getElementById('mobileMoreBackdrop');
+    var more = document.querySelector('.mobile-bottom-nav button[data-more="true"]');
+    if(sheet) sheet.classList.remove('open');
+    if(backdrop) backdrop.classList.remove('open');
+    if(more) more.setAttribute('aria-expanded','false');
+  }
+  function openSheet(){
+    var sheet = document.getElementById('mobileMoreSheet');
+    var backdrop = document.getElementById('mobileMoreBackdrop');
+    var more = document.querySelector('.mobile-bottom-nav button[data-more="true"]');
+    if(sheet) sheet.classList.add('open');
+    if(backdrop) backdrop.classList.add('open');
+    if(more) more.setAttribute('aria-expanded','true');
+    document.body.classList.add('mobile-sheet-open');
+  }
+  function ensureMobileBottomNav(){
+    if(document.getElementById('mobileBottomNav')) return;
+    var navButtons = getNavButtons();
+    if(!navButtons.length) return;
+
+    var principal = ['diag','dns','ip','meu_ip'];
+    var bottom = document.createElement('nav');
+    bottom.id = 'mobileBottomNav';
+    bottom.className = 'mobile-bottom-nav';
+    bottom.setAttribute('aria-label','Menu inferior de ferramentas');
+
+    principal.forEach(function(tab){
+      var original = navButtons.find(function(b){return b.getAttribute('data-tab') === tab;});
+      if(!original) return;
+      var parts = splitIconAndText(original.textContent);
+      var b = document.createElement('button');
+      b.type = 'button';
+      b.setAttribute('data-tab', tab);
+      b.setAttribute('title', parts.txt);
+      b.innerHTML = '<span class="ico" aria-hidden="true">'+parts.ico+'</span><span class="txt">'+parts.txt.replace(/Consulta\s+/,'')+'</span>';
+      b.addEventListener('click', function(){ closeSheet(); activateTab(tab); });
+      bottom.appendChild(b);
+    });
+
+    var more = document.createElement('button');
+    more.type = 'button';
+    more.setAttribute('data-more','true');
+    more.setAttribute('aria-haspopup','dialog');
+    more.setAttribute('aria-expanded','false');
+    more.setAttribute('title','Mais ferramentas');
+    more.innerHTML = '<span class="ico" aria-hidden="true">☰</span><span class="txt">Mais</span>';
+    more.addEventListener('click', function(){
+      var sheet = document.getElementById('mobileMoreSheet');
+      if(sheet && sheet.classList.contains('open')) closeSheet(); else openSheet();
+    });
+    bottom.appendChild(more);
+
+    var backdrop = document.createElement('div');
+    backdrop.id = 'mobileMoreBackdrop';
+    backdrop.className = 'mobile-more-backdrop';
+    backdrop.addEventListener('click', closeSheet);
+
+    var sheet = document.createElement('section');
+    sheet.id = 'mobileMoreSheet';
+    sheet.className = 'mobile-more-sheet';
+    sheet.setAttribute('role','dialog');
+    sheet.setAttribute('aria-label','Todas as ferramentas');
+    sheet.innerHTML = '<div class="mobile-more-title"><span>Ferramentas</span><button type="button" class="mobile-more-close" aria-label="Fechar">×</button></div><div class="mobile-more-grid"></div>';
+    sheet.querySelector('.mobile-more-close').addEventListener('click', closeSheet);
+    var grid = sheet.querySelector('.mobile-more-grid');
+    navButtons.forEach(function(original){
+      var tab = original.getAttribute('data-tab');
+      var parts = splitIconAndText(original.textContent);
+      var b = document.createElement('button');
+      b.type = 'button';
+      b.setAttribute('data-tab', tab);
+      b.setAttribute('title', parts.txt);
+      b.innerHTML = '<span class="ico" aria-hidden="true">'+parts.ico+'</span><span class="txt">'+parts.txt+'</span>';
+      b.addEventListener('click', function(){ closeSheet(); activateTab(tab); });
+      grid.appendChild(b);
+    });
+
+    document.body.appendChild(backdrop);
+    document.body.appendChild(sheet);
+    document.body.appendChild(bottom);
+
+    navButtons.forEach(function(btn){
+      btn.addEventListener('click', function(){ syncMobileActive(btn.getAttribute('data-tab')); });
+    });
+    syncMobileActive(currentTab());
+  }
+  function setViewportHeightVar(){
+    document.documentElement.style.setProperty('--app-vh', (window.innerHeight * 0.01) + 'px');
+  }
+  function boot(){
+    setViewportHeightVar();
+    ensureMobileBottomNav();
+  }
+  if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', boot); else boot();
+  window.addEventListener('resize', setViewportHeightVar, {passive:true});
+  window.addEventListener('orientationchange', function(){ setTimeout(setViewportHeightVar, 250); }, {passive:true});
+  document.addEventListener('keydown', function(ev){ if(ev.key === 'Escape') closeSheet(); });
 })();
 </script>
 
